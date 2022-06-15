@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="hospitaldbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="appartenenza">
+    <Key>
+      <PropertyRef Name="IdReferto" />
+      <PropertyRef Name="IdTipologia" />
+    </Key>
+    <Property Name="IdReferto" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdTipologia" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="assegnazionecura">
+    <Key>
+      <PropertyRef Name="IdReferto" />
+      <PropertyRef Name="IdCura" />
+    </Key>
+    <Property Name="IdReferto" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdCura" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="assiste">
+    <Key>
+      <PropertyRef Name="IdInfermiere" />
+      <PropertyRef Name="IdReferto" />
+    </Key>
+    <Property Name="IdInfermiere" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdReferto" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="assistenza">
+    <Key>
+      <PropertyRef Name="IdInfermiere" />
+      <PropertyRef Name="IdReferto" />
+    </Key>
+    <Property Name="IdInfermiere" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdReferto" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="chirurgo">
+    <Key>
+      <PropertyRef Name="IdChirurgo" />
+    </Key>
+    <Property Name="IdChirurgo" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Nome" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cognome" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CodiceFiscale" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DataNascita" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Genere" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="InterventiEffettuati" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="cura">
+    <Key>
+      <PropertyRef Name="IdCura" />
+    </Key>
+    <Property Name="IdCura" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descrizione" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="effettua">
+    <Key>
+      <PropertyRef Name="IdChirurgo" />
+      <PropertyRef Name="IdReferto" />
+    </Key>
+    <Property Name="IdChirurgo" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdReferto" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="esecuzione">
+    <Key>
+      <PropertyRef Name="IdReferto" />
+      <PropertyRef Name="IdMedico" />
+    </Key>
+    <Property Name="IdReferto" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdMedico" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="infermiere">
+    <Key>
+      <PropertyRef Name="IdInfermiere" />
+    </Key>
+    <Property Name="IdInfermiere" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Nome" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Cognome" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CodiceFiscale" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DataNascita" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Genere" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="intervento">
+    <Key>
+      <PropertyRef Name="IdReferto" />
+    </Key>
+    <Property Name="IdReferto" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Giorno" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="OraInizio" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="OraFine" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdIntervento" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Descrizione" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdPaziente" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="intervento_tipologia">
+    <Key>
+      <PropertyRef Name="IdTipologia" />
+      <PropertyRef Name="IdReferto" />
+    </Key>
+    <Property Name="IdTipologia" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdReferto" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityContainer Name="hospitaldbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="appartenenzas" EntityType="Self.appartenenza" />
+    <EntitySet Name="assegnazionecuras" EntityType="Self.assegnazionecura" />
+    <EntitySet Name="assistes" EntityType="Self.assiste" />
+    <EntitySet Name="assistenzas" EntityType="Self.assistenza" />
+    <EntitySet Name="chirurgoes" EntityType="Self.chirurgo" />
+    <EntitySet Name="curas" EntityType="Self.cura" />
+    <EntitySet Name="effettuas" EntityType="Self.effettua" />
+    <EntitySet Name="esecuziones" EntityType="Self.esecuzione" />
+    <EntitySet Name="infermieres" EntityType="Self.infermiere" />
+    <EntitySet Name="interventoes" EntityType="Self.intervento" />
+    <EntitySet Name="intervento_tipologia" EntityType="Self.intervento_tipologia" />
+  </EntityContainer>
+</Schema>
