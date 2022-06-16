@@ -1,0 +1,66 @@
+﻿@model HospitalDBProject.Models.intervento
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>intervento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Giorno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Giorno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OraInizio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OraInizio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OraFine)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OraFine)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descrizione)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descrizione)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.paziente.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.paziente.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.referto.Descrizione)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.referto.Descrizione)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IdIntervento }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

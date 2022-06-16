@@ -1,0 +1,72 @@
+﻿@model HospitalDBProject.Models.visita
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>visita</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Giorno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Giorno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OraInizio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OraInizio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OraFine)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OraFine)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descrizione)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descrizione)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.paziente.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.paziente.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.referto.Descrizione)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.referto.Descrizione)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
