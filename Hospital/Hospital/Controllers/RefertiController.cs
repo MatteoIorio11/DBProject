@@ -84,6 +84,7 @@ namespace Hospital.Controllers
             {
                 db.Entry(referto).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Referto aggiunto con successo";
                 return RedirectToAction("Index");
             }
             return View(referto);

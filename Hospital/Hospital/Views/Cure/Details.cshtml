@@ -10,16 +10,38 @@
     <h4>cura</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Descrizione)
-        </dt>
-
+        <dd>
+            @Html.LabelFor(model => model.Descrizione)
+        </dd>
         <dd>
             @Html.DisplayFor(model => model.Descrizione)
         </dd>
-
     </dl>
 </div>
+<table class="table">
+    <tr>
+        <th>
+            <label>Id Medicinale</label>
+        </th>
+        <th>
+            <label>Nome Medicinale</label>
+        </th>
+    </tr>
+    @foreach (var medi in Model.medicinas)
+    {
+        <tr>
+            <th>
+                @Html.DisplayFor(model => medi.IdMedicina)
+
+            </th>
+            <th>
+                @Html.DisplayFor(model => medi.Nome)
+
+            </th>
+        </tr>
+
+    }
+</table>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.IdCura }) |
     @Html.ActionLink("Back to List", "Index")

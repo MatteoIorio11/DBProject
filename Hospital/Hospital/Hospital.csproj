@@ -342,6 +342,7 @@
     <Content Include="Views\Tipologie\TopDieciTipologie.cshtml" />
     <Content Include="Views\Pazienti\VisualizzaReferti.cshtml" />
     <Content Include="Views\Pazienti\VisualizzaCure.cshtml" />
+    <Content Include="Views\Cure\AggiungiMedicinale.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

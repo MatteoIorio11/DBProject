@@ -77,9 +77,10 @@ namespace Hospital.Controllers
                 db.visitas.Add(visita);
                 this.UpdateVisiteMedici(medici);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Visite aggiunto con successo";
                 return RedirectToAction("Index");
             }
-
+            TempData["FailMessage"] = "Visite non aggiunta";
             ViewBag.IdPaziente = new SelectList(db.pazientes, "IdPaziente", "IdPaziente", visita.IdPaziente);
             ViewBag.IdReferto = new SelectList(db.refertoes, "IdReferto", "IdReferto", visita.IdReferto);
             return View(visita);

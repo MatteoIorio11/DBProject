@@ -48,14 +48,23 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdInfermiere,Nome,Cognome,CodiceFiscale,DataNascita,Genere,NumeroDiTelefono")] infermiere infermiere)
         {
-            if (ModelState.IsValid)
+            if (!this.Check(infermiere))
             {
                 db.infermieres.Add(infermiere);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Infermiere aggiunto con successo";
                 return RedirectToAction("Index");
             }
+            TempData["FailMessage"] = "Infermiere aggiunto con successo";
+            return RedirectToAction("Index");
+        }
 
-            return View(infermiere);
+        private bool Check(infermiere infermiere)
+        {
+            return db.chirurgoes.Any(ch => ch.CodiceFiscale == infermiere.CodiceFiscale) ||
+                   db.pazientes.Any(pa => pa.CodiceFiscale == infermiere.CodiceFiscale) ||
+                   db.infermieres.Any(inf => inf.CodiceFiscale == infermiere.CodiceFiscale) ||
+                   db.medicos.Any(med => med.CodiceFiscale == infermiere.CodiceFiscale);
         }
 
         // GET: Infermieri/Edit/5

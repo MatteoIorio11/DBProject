@@ -55,10 +55,13 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(intervento intervento)
         {
-            var a = ModelState.Count;
-            if (this.Check())
+            string[] id_chirurghi = null;
+            var idPaziente = intervento.IdPaziente;
+            if (ModelState["chirurgoes"] != null) {
+                id_chirurghi = ModelState["chirurgoes"].Value.AttemptedValue.Split(',');
+            }
+            if (id_chirurghi != null || idPaziente == null)
             {
-                string[] id_chirurghi = ModelState["chirurgoes"].Value.AttemptedValue.Split(',');
                 string[] id_infermieri = ModelState["infermieres"].Value.AttemptedValue.Split(',');
                 string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
                 var chirurghi = this.AddChirurghi(id_chirurghi);
@@ -70,6 +73,7 @@ namespace Hospital.Controllers
                     !this.CheckInfermieri(infermieri,intervento) || 
                     !this.CheckPazienti(paziente,intervento))
                 {
+                    TempData["FailMessage"] = "Intervento non aggiunto ";
                     return RedirectToAction("Index");
                 }
                 if (paziente != null)
@@ -83,13 +87,13 @@ namespace Hospital.Controllers
 
                 db.interventoes.Add(intervento);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Intervento aggiunto con successo";
                 return RedirectToAction("Index");
             }
-            
-            ViewBag.chirurghi = new SelectList(db.chirurgoes, "IdChirurgo", intervento.chirurgoes);
-            ViewBag.IdPaziente = new SelectList(db.pazientes, "IdPaziente", "Nome", intervento.IdPaziente);
-            ViewBag.IdReferto = new SelectList(db.refertoes, "IdReferto", "IdReferto", intervento.IdReferto);
-            return View(intervento);
+
+            TempData["FailMessage"] = "Intervento non aggiunto ";
+
+            return RedirectToAction("Index");
         }
 
         public List<chirurgo> AddChirurghi(string[] ids)
@@ -241,10 +245,9 @@ namespace Hospital.Controllers
             return true;
         }
 
-        private bool Check()
+        private bool Check(string[] ids)
         {
-            var a = ModelState.IsValid;
-            return true;
+            return ids.Length > 0;
         }
         private bool Check(int id_chirurgo, int id_infermiere, int id_tipologia, intervento intervento)
         {
@@ -283,7 +286,7 @@ namespace Hospital.Controllers
         public ActionResult Edit([Bind(Include = "IdIntervento,IdReferto,IdPaziente")] intervento intervento)
         {
             var id = ModelState["IdReferto"].Value.AttemptedValue;
-            if (this.Check())
+            if (id == null)
             {
                 referto referto = db.refertoes.First(refer => refer.IdReferto.ToString().Equals(id));
                 intervento inter = db.interventoes.First(inte => inte.IdIntervento == intervento.IdIntervento);

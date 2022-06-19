@@ -52,6 +52,7 @@ namespace Hospital.Controllers
             {
                 db.medicinas.Add(medicina);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Medico aggiunto con successo";
                 return RedirectToAction("Index");
             }
 

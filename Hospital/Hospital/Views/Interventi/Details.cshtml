@@ -60,6 +60,76 @@
 
     </dl>
 </div>
+<div class="col-md-12">
+    <div class="col-md-6">
+        <h3>Infermieri</h3>
+        <table class="table">
+            <tr>
+                <th>
+                    <label>Id Infermiere</label>
+                </th>
+                <th>
+                    <label>Nome</label>
+                </th>
+                <th>
+                    <label>Codice Fiscale</label>
+                </th>
+            </tr>
+            @foreach (var medi in Model.infermieres)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(model => medi.IdInfermiere)
+
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => medi.Nome)
+
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => medi.CodiceFiscale)
+
+                    </th>
+                </tr>
+
+            }
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h3>Chirurghi</h3>
+        <table class="table">
+            <tr>
+                <th>
+                    <label>Id Chirurgo</label>
+                </th>
+                <th>
+                    <label>Nome </label>
+                </th>
+                <th>
+                    <label>Codice Fiscale</label>
+                </th>
+            </tr>
+            @foreach (var medi in Model.chirurgoes)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(model => medi.IdChirurgo)
+
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => medi.Nome)
+
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => medi.CodiceFiscale)
+
+                    </th>
+                </tr>
+
+            }
+        </table>
+    </div>
+</div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.IdIntervento }) |
     @Html.ActionLink("Back to List", "Index")

@@ -49,15 +49,24 @@ namespace Hospital.Controllers
         public ActionResult Create([Bind(Include = "IdPaziente,Nome,Cognome,CodiceFiscale,DataNascita,Genere,NumeroInterventiEffettuati,NumeroDiTelefono")] paziente paziente)
         {
             
-            if (ModelState.IsValid)
+            if (!this.Check(paziente))
             {
                 paziente.NumeroInterventiEffettuati = 0;
                 db.pazientes.Add(paziente);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Paziente aggiunto con successo";
                 return RedirectToAction("Index");
             }
+            TempData["FailMessage"] = "Paziente non aggiunto";
+            return RedirectToAction("Index");
+        }
 
-            return View(paziente);
+        public bool Check(paziente paziente)
+        {
+            return db.chirurgoes.Any(ch => ch.CodiceFiscale == paziente.CodiceFiscale) ||
+                   db.pazientes.Any(pa => pa.CodiceFiscale == paziente.CodiceFiscale) ||
+                   db.infermieres.Any(inf => inf.CodiceFiscale == paziente.CodiceFiscale) ||
+                   db.medicos.Any(med => med.CodiceFiscale == paziente.CodiceFiscale);
         }
 
         // GET: Pazienti/Edit/5

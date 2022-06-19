@@ -50,16 +50,17 @@ namespace Hospital.Controllers
         public ActionResult Create([Bind(Include = "IdChirurgo,Nome,Cognome,CodiceFiscale,DataNascita,Genere,NumeroDiTelefono,tipologias")] chirurgo chirurgo)
         {
             string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
-            if (this.Check())
+            if (!this.Check(chirurgo))
             {
                 var tipologie= this.AddTipologie(id_tipologie);
                 tipologie.ForEach(tipo => chirurgo.tipologias.Add(tipo));
                 db.chirurgoes.Add(chirurgo);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Chirurgo aggiunto con successo";
                 return RedirectToAction("Index");
             }
-
-            return View(chirurgo);
+            TempData["FailMessage"] = "Chirurgo non aggiunto.";
+            return RedirectToAction("Index");
         }
 
         private List<tipologia> AddTipologie(string[] ids)
@@ -72,9 +73,12 @@ namespace Hospital.Controllers
             return output;
         }
 
-        public bool Check()
+        public bool Check(chirurgo chirurgo)
         {
-            return true;
+            return db.chirurgoes.Any(ch => ch.CodiceFiscale == chirurgo.CodiceFiscale) ||
+                db.pazientes.Any(pa => pa.CodiceFiscale == chirurgo.CodiceFiscale) || 
+                db.infermieres.Any(inf => inf.CodiceFiscale == chirurgo.CodiceFiscale) || 
+                db.medicos.Any(med => med.CodiceFiscale == chirurgo.CodiceFiscale);
         }
 
         // GET: Chirurghi/Edit/5

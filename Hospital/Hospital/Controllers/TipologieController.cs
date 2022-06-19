@@ -84,6 +84,7 @@ namespace Hospital.Controllers
             {
                 db.Entry(tipologia).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Medico aggiunto con successo";
                 return RedirectToAction("Index");
             }
             return View(tipologia);

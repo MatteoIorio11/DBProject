@@ -52,6 +52,7 @@ namespace Hospital.Controllers
             {
                 db.curas.Add(cura);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Cura aggiunto con successo";
                 return RedirectToAction("Index");
             }
 
@@ -123,6 +124,36 @@ namespace Hospital.Controllers
             db.curas.Remove(cura);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult AggiungiMedicinale(int id)
+        {
+            cura cura = db.curas.Find(id);
+            ViewBag.medicine = new MultiSelectList(db.medicinas, "IdMedicina", "IdMedicina");
+            return View(cura);
+        }
+
+        [HttpPost]
+        public ActionResult AggiungiMedicinale(cura cura)
+        {
+            var id_medicinali= ModelState["medicinas"].Value.AttemptedValue.Split(',');
+            var medicine = this.AddMedicine(id_medicinali);
+            cura cu = db.curas.Where(c => c.IdCura == cura.IdCura).First();
+            medicine.ForEach(medi => cu.medicinas.Add(medi));
+            db.Entry(cu).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        private List<medicina> AddMedicine(string[] medicine)
+        {
+            var ids = medicine.Skip(1).ToList();
+            List<medicina>  output = new List<medicina>();
+            foreach(var id in ids)
+            {
+                output.Add(db.medicinas.Where(med => med.IdMedicina.ToString().Equals(id)).First());
+            }
+            return output;
         }
 
         protected override void Dispose(bool disposing)

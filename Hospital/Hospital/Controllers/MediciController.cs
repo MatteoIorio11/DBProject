@@ -38,6 +38,7 @@ namespace Hospital.Controllers
         // GET: Medici/Create
         public ActionResult Create()
         {
+            ViewBag.tipologie = new MultiSelectList(db.tipologias, "IdTipologia", "IdTipologia");
             return View();
         }
 
@@ -46,16 +47,40 @@ namespace Hospital.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdMedico,Nome,Cognome,CodiceFiscale,DataNascita,Genere,NumeroVisiteEffettuate,NumeroDiTelefono")] medico medico)
+        public ActionResult Create([Bind(Include = "IdMedico,Nome,Cognome,CodiceFiscale,DataNascita,Genere,NumeroVisiteEffettuate,NumeroDiTelefono,tipologias")] medico medico)
         {
-            if (ModelState.IsValid)
+            var id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
+            if (!this.Check(medico))
             {
+                //AGGIUNGERE LA TIPOLOGIA
+                var tipologie = this.AddTipologie(id_tipologie);
+                tipologie.ForEach(tipo => medico.tipologias.Add(tipo));
+                medico.NumeroVisiteEffettuate = 0;
                 db.medicos.Add(medico);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Medico aggiunto con successo";
                 return RedirectToAction("Index");
             }
+            TempData["FailMessage"] = "Medico non aggiunto successo";
+            return RedirectToAction("Index");
+        }
 
-            return View(medico);
+        private List<tipologia> AddTipologie(string[] ids)
+        {
+            List<tipologia> output = new List<tipologia>();
+            foreach(var id in ids)
+            {
+                output.Add(db.tipologias.Where(tipo => tipo.IdTipologia.ToString().Equals(id)).First());
+            }
+            return output;
+        }
+
+        private bool Check(medico medico)
+        {
+            return db.chirurgoes.Any(ch => ch.CodiceFiscale == medico.CodiceFiscale) ||
+                   db.pazientes.Any(pa => pa.CodiceFiscale == medico.CodiceFiscale) ||
+                   db.infermieres.Any(inf => inf.CodiceFiscale == medico.CodiceFiscale) ||
+                   db.medicos.Any(med => med.CodiceFiscale == medico.CodiceFiscale);
         }
 
         // GET: Medici/Edit/5

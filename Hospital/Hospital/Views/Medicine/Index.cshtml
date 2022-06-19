@@ -6,6 +6,12 @@
 
 <h2>Index</h2>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        <strong>Success</strong> @TempData["SuccessMessage"]
+    </div>
+}
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -23,23 +29,24 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Marca)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descrizione)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdMedicina }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdMedicina }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdMedicina })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Marca)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descrizione)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.IdMedicina }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IdMedicina }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.IdMedicina })
+            </td>
+        </tr>
+    }
 
 </table>

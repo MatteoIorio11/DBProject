@@ -1,0 +1,34 @@
+﻿@model Hospital.Models.cura
+
+@{
+    ViewBag.Title = "AggiungiMedicinale";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>cura</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.IdCura)
+
+        <div class="form-group">
+            @Html.HiddenFor(model => model.medicinas)
+            @Html.LabelFor(model => model.medicinas, "medicinas", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.ListBoxFor(model => model.medicinas, ViewBag.medicine as MultiSelectList, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<h2>AggiungiMedicinale</h2>
+
