@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Hospital.Models.tipologia>
+ 
+@{
+    ViewBag.Title = "Top Dieci tipologie";
+}
+
+<h2>TopDieciTipologie</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            <label>Id</label>
+        </th>
+        <th>
+            <label>Totale</label>
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (Tuple<int,int> item in ViewBag.classifica) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Item1)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Item2)
+    </td>
+</tr>
+}
+
+</table>

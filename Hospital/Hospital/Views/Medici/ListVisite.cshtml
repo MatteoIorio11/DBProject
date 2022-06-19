@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Hospital.Models.medico>
+
+@{
+    ViewBag.Title = "ListVisite";
+}
+
+<h2>ListVisite</h2>
+
+<p>
+    @Html.ActionLink("Index", "Index")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cognome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CodiceFiscale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DataNascita)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Genere)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumeroVisiteEffettuate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumeroDiTelefono)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cognome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CodiceFiscale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DataNascita)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Genere)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumeroVisiteEffettuate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumeroDiTelefono)
+        </td>
+    </tr>
+}
+
+</table>
