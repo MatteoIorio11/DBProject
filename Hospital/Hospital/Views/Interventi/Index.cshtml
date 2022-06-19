@@ -12,6 +12,9 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.IdIntervento)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Descrizione)
         </th>
         <th>
@@ -33,31 +36,34 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Descrizione)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OraInizio)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OraFine)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Giorno)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.paziente.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.referto.Descrizione)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdIntervento }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdIntervento }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdIntervento })
-        </td>
-    </tr>
+<tr>
+    <th>
+        @Html.DisplayFor(model => item.IdIntervento)
+    </th>
+    <td>
+        @Html.DisplayFor(modelItem => item.Descrizione)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.OraInizio)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.OraFine)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Giorno)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.paziente.Nome)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.referto.Descrizione)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.IdIntervento }) |
+        @Html.ActionLink("Details", "Details", new { id = item.IdIntervento }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.IdIntervento })
+    </td>
+</tr>
 }
 
 </table>

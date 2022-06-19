@@ -340,6 +340,8 @@
     <Content Include="Views\Pazienti\ListInterventi.cshtml" />
     <Content Include="Views\Interventi\ScegliChirurghi.cshtml" />
     <Content Include="Views\Tipologie\TopDieciTipologie.cshtml" />
+    <Content Include="Views\Pazienti\VisualizzaReferti.cshtml" />
+    <Content Include="Views\Pazienti\VisualizzaCure.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

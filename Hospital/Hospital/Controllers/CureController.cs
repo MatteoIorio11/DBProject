@@ -70,6 +70,7 @@ namespace Hospital.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.referti = new SelectList(db.refertoes, "IdReferto", "IdReferto");
             return View(cura);
         }
 
@@ -78,15 +79,24 @@ namespace Hospital.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdCura,Descrizione")] cura cura)
+        public ActionResult Edit([Bind(Include = "IdCura,refertoes")] cura cura)
         {
-            if (ModelState.IsValid)
+            if (this.Check())
             {
-                db.Entry(cura).State = EntityState.Modified;
+                var refer = ModelState["refertoes"].Value.AttemptedValue.Split(',')[1];
+                var cu = db.curas.Where(cur => cura.IdCura == cur.IdCura).First();
+                var referto = db.refertoes.Where(refe => refe.IdReferto.ToString().Equals(refer)).First();
+                cu.refertoes.Add(referto);
+                db.Entry(cu).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(cura);
+        }
+
+        public bool Check()
+        {
+            return true;
         }
 
         // GET: Cure/Delete/5

@@ -38,6 +38,7 @@ namespace Hospital.Controllers
         // GET: Chirurghi/Create
         public ActionResult Create()
         {
+            ViewBag.tipologie = new SelectList(db.tipologias, "IdTipologia", "IdTipologia");
             return View();
         }
 
@@ -46,16 +47,34 @@ namespace Hospital.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdChirurgo,Nome,Cognome,CodiceFiscale,DataNascita,Genere,NumeroDiTelefono")] chirurgo chirurgo)
+        public ActionResult Create([Bind(Include = "IdChirurgo,Nome,Cognome,CodiceFiscale,DataNascita,Genere,NumeroDiTelefono,tipologias")] chirurgo chirurgo)
         {
-            if (ModelState.IsValid)
+            string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
+            if (this.Check())
             {
+                var tipologie= this.AddTipologie(id_tipologie);
+                tipologie.ForEach(tipo => chirurgo.tipologias.Add(tipo));
                 db.chirurgoes.Add(chirurgo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             return View(chirurgo);
+        }
+
+        private List<tipologia> AddTipologie(string[] ids)
+        {
+            List<tipologia> output = new List<tipologia>();
+            foreach(var id in ids)
+            {
+                output.Add(db.tipologias.Where(tipol => tipol.IdTipologia.ToString().Equals(id)).First()); 
+            }
+            return output;
+        }
+
+        public bool Check()
+        {
+            return true;
         }
 
         // GET: Chirurghi/Edit/5
