@@ -88,8 +88,6 @@ namespace Hospital.Controllers
 
         private bool CheckChirurgo(chirurgo chirurgo)
         {
-            var interventi =
-                from interv in db.interventoes;
             return true;
         }
 
@@ -134,7 +132,7 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "IdIntervento,IdReferto,Descrizione,IdPaziente,OraInizio,OraFine,Giorno,chirurgoes,infermieres,tipologias")] intervento intervento)
         {
-            if (this.check())
+            if (this.Check())
             {
                 var id_chirurghi = ModelState["chirurgoes"].Value.AttemptedValue;
                 var id_infermieri = ModelState["infermieres"].Value.AttemptedValue;

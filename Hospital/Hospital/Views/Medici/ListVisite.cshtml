@@ -21,18 +21,8 @@
             @Html.DisplayNameFor(model => model.CodiceFiscale)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DataNascita)
+            <label>Numero visite effettuate</label>
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Genere)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NumeroVisiteEffettuate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.NumeroDiTelefono)
-        </th>
-        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -47,16 +37,7 @@
             @Html.DisplayFor(modelItem => item.CodiceFiscale)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.DataNascita)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Genere)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.NumeroVisiteEffettuate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.NumeroDiTelefono)
         </td>
     </tr>
 }
