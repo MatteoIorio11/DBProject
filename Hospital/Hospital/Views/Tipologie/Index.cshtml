@@ -26,6 +26,9 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.IdTipologia)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Tipo)
         </th>
         <th>
@@ -36,19 +39,22 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descrizione)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.IdTipologia }) |
-                @Html.ActionLink("Details", "Details", new { id = item.IdTipologia }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.IdTipologia })
-            </td>
-        </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.IdTipologia)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Tipo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Descrizione)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.IdTipologia }) |
+        @Html.ActionLink("Details", "Details", new { id = item.IdTipologia }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.IdTipologia })
+    </td>
+</tr>
     }
 
 </table>

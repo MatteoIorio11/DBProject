@@ -91,8 +91,10 @@ namespace Hospital.Controllers
                 cu.refertoes.Add(referto);
                 db.Entry(cu).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Referto collegato con successo successo";
                 return RedirectToAction("Index");
             }
+            TempData["FailMessage"] = "Referto non collegato.";
             return View(cura);
         }
 
@@ -153,6 +155,7 @@ namespace Hospital.Controllers
             medicine.ForEach(medi => cu.medicinas.Add(medi));
             db.Entry(cu).State = EntityState.Modified;
             db.SaveChanges();
+            TempData["SuccessMessage"] = "Medicinale aggiunto alla cura con successo.";
             return RedirectToAction("Index");
         }
         private List<medicina> AddMedicine(string[] medicine)

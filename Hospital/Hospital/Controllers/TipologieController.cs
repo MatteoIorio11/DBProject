@@ -86,10 +86,10 @@ namespace Hospital.Controllers
             {
                 db.Entry(tipologia).State = EntityState.Modified;
                 db.SaveChanges();
-                TempData["SuccessMessage"] = "Tipologia eliminata con successo";
+                TempData["SuccessMessage"] = "Tipologia modificato con successo";
                 return RedirectToAction("Index");
             }
-            TempData["FailMessage"] = "Tipologia non eliminata";
+            TempData["FailMessage"] = "Tipologia non modificato";
             return View(tipologia);
         }
 
@@ -114,14 +114,14 @@ namespace Hospital.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             tipologia tipologia = db.tipologias.Find(id);
-            if (this.CheckTipologia(tipologia))
+            if (!this.CheckTipologia(tipologia))
             {
                 db.tipologias.Remove(tipologia);
                 db.SaveChanges();
-                TempData["SuccessMessage"] = "Tipologia aggiunto con successo";
+                TempData["SuccessMessage"] = "Tipologia eliminato con successo";
                 return RedirectToAction("Index");
             }
-            TempData["FailMessage"] = "Medico non eliminato";
+            TempData["FailMessage"] = "Tipologia non eliminato";
             return RedirectToAction("Index");
         }
 

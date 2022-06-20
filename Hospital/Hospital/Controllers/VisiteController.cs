@@ -108,8 +108,8 @@ namespace Hospital.Controllers
                     from inf in interventi_infermieri
                     join inter in db.interventoes on inf.IdIntervento equals inter.IdIntervento
                     where inter.Giorno == visita.Giorno &&
-                    ((inter.OraInizio < visita.OraInizio &&
-                    inter.OraFine > visita.OraFine) ||
+                    ((inter.OraInizio <= visita.OraInizio &&
+                    inter.OraFine >= visita.OraFine) ||
                     (inter.OraInizio > visita.OraInizio &&
                     inter.OraInizio < visita.OraFine) ||
                      (inter.OraFine > visita.OraInizio &&
@@ -124,8 +124,8 @@ namespace Hospital.Controllers
                     from inf in visite_infermieri
                     join vis in db.visitas on inf.IdVisita equals vis.IdVisita
                     where vis.Giorno == visita.Giorno &&
-                    ((vis.OraInizio < visita.OraInizio &&
-                    vis.OraFine > visita.OraFine) ||
+                    ((vis.OraInizio <= visita.OraInizio &&
+                    vis.OraFine >= visita.OraFine) ||
                     (vis.OraInizio > visita.OraInizio &&
                     vis.OraInizio < visita.OraFine) ||
                      (vis.OraFine > visita.OraInizio &&
@@ -144,8 +144,8 @@ namespace Hospital.Controllers
             from vis in db.visitas
             where vis.IdPaziente == p.IdPaziente &&
             vis.Giorno == visita.Giorno &&
-            ((vis.OraInizio < visita.OraInizio &&
-            vis.OraFine > visita.OraFine) ||
+            ((vis.OraInizio <= visita.OraInizio &&
+            vis.OraFine >= visita.OraFine) ||
             (vis.OraInizio > visita.OraInizio &&
             vis.OraInizio < visita.OraFine) ||
                 (vis.OraFine > visita.OraInizio &&
@@ -160,8 +160,8 @@ namespace Hospital.Controllers
             from inter in db.interventoes
             where inter.IdPaziente == p.IdPaziente &&
             inter.Giorno == visita.Giorno &&
-            ((inter.OraInizio < visita.OraInizio &&
-            inter.OraFine > visita.OraFine) ||
+            ((inter.OraInizio <= visita.OraInizio &&
+            inter.OraFine >= visita.OraFine) ||
             (inter.OraInizio > visita.OraInizio &&
             inter.OraInizio < visita.OraFine) ||
                 (inter.OraFine > visita.OraInizio &&
@@ -184,8 +184,8 @@ namespace Hospital.Controllers
                     from med in visite_medici
                     join vis in db.visitas on med.IdVisita equals vis.IdVisita
                     where vis.Giorno == visita.Giorno &&
-                    ((vis.OraInizio < visita.OraInizio &&
-                    vis.OraFine > visita.OraFine) ||
+                    ((vis.OraInizio <= visita.OraInizio &&
+                    vis.OraFine >= visita.OraFine) ||
                     (vis.OraInizio > visita.OraInizio &&
                     vis.OraInizio < visita.OraFine) ||
                      (vis.OraFine > visita.OraInizio &&
