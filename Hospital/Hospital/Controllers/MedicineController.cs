@@ -55,7 +55,7 @@ namespace Hospital.Controllers
                 TempData["SuccessMessage"] = "Medico aggiunto con successo";
                 return RedirectToAction("Index");
             }
-
+            TempData["FailMessage"] = "Medico non aggiunto ";
             return View(medicina);
         }
 
@@ -111,9 +111,21 @@ namespace Hospital.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             medicina medicina = db.medicinas.Find(id);
-            db.medicinas.Remove(medicina);
-            db.SaveChanges();
+            if (!this.CheckMedicina(medicina))
+            {
+                db.medicinas.Remove(medicina);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Medico modificato con successo";
+                return RedirectToAction("Index");
+            }
+            TempData["FailMessage"] = "Medico non modificato ";
+
             return RedirectToAction("Index");
+        }
+
+        public bool CheckMedicina(medicina medicina)
+        {
+            return db.curas.Any(cur => cur.medicinas.Any(med => med.IdMedicina == medicina.IdMedicina));
         }
 
         protected override void Dispose(bool disposing)

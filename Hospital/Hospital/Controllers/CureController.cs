@@ -55,7 +55,7 @@ namespace Hospital.Controllers
                 TempData["SuccessMessage"] = "Cura aggiunto con successo";
                 return RedirectToAction("Index");
             }
-
+            TempData["FailMessage"] = "Cura non aggiunta";
             return View(cura);
         }
 
@@ -82,9 +82,10 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "IdCura,refertoes")] cura cura)
         {
-            if (this.Check())
+            if (ModelState["refertoes"] != null)
             {
                 var refer = ModelState["refertoes"].Value.AttemptedValue.Split(',')[1];
+
                 var cu = db.curas.Where(cur => cura.IdCura == cur.IdCura).First();
                 var referto = db.refertoes.Where(refe => refe.IdReferto.ToString().Equals(refer)).First();
                 cu.refertoes.Add(referto);
@@ -95,10 +96,6 @@ namespace Hospital.Controllers
             return View(cura);
         }
 
-        public bool Check()
-        {
-            return true;
-        }
 
         // GET: Cure/Delete/5
         public ActionResult Delete(int? id)
@@ -121,9 +118,22 @@ namespace Hospital.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             cura cura = db.curas.Find(id);
-            db.curas.Remove(cura);
-            db.SaveChanges();
+            if (!this.CheckCura(cura))
+            {
+                db.curas.Remove(cura);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Cura eliminata successo";
+                return RedirectToAction("Index");
+            }
+            TempData["FailMessage"] = "Cura non eliminata";
+
             return RedirectToAction("Index");
+        }
+
+        public bool CheckCura(cura cura)
+        {
+            return db.refertoes.Any(refe => refe.curas.Any(cur => cur.IdCura == cura.IdCura)) ||
+                db.medicinas.Any(med => med.curas.Any(cur => cur.IdCura == cura.IdCura));
         }
 
         [HttpGet]

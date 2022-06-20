@@ -118,10 +118,22 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            infermiere infermiere = db.infermieres.Find(id);
-            db.infermieres.Remove(infermiere);
-            db.SaveChanges();
+            infermiere infermiere = db.infermieres.Where(inf => inf.IdInfermiere == id).First(); ;
+            if (!this.CheckOperazioni(infermiere))
+            {
+                db.infermieres.Remove(infermiere);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Infermiere eliminato con successo";
+                return RedirectToAction("Index");
+            }
+            TempData["FailMessage"] = "Infermiere non eliminato ";
             return RedirectToAction("Index");
+        }
+
+        private bool CheckOperazioni(infermiere infermiere)
+        {
+            return db.visitas.Any(vis => vis.infermieres.Any(infer=> infer.IdInfermiere == infermiere.IdInfermiere))||
+                db.interventoes.Any(inter => inter.infermieres.Any(inf => inf.IdInfermiere == infermiere.IdInfermiere));
         }
 
         protected override void Dispose(bool disposing)

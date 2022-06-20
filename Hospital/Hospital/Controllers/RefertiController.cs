@@ -111,9 +111,22 @@ namespace Hospital.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             referto referto = db.refertoes.Find(id);
-            db.refertoes.Remove(referto);
-            db.SaveChanges();
+            if (!this.CheckReferto(referto))
+            {
+                db.refertoes.Remove(referto);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Referto eliminato successo";
+                return RedirectToAction("Index");
+            }
+            TempData["FailMessage"] = "Referto non eliminato";
+
             return RedirectToAction("Index");
+        }
+
+        private bool CheckReferto(referto referto)
+        {
+            return db.interventoes.Any(inter => inter.IdReferto == referto.IdReferto) ||
+                db.visitas.Any(visit => visit.IdReferto == referto.IdReferto);
         }
 
         protected override void Dispose(bool disposing)

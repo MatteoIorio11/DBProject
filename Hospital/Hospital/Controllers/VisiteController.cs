@@ -54,22 +54,23 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create( visita visita)
         {
-            string[] id_medici = ModelState["medicos"].Value.AttemptedValue.Split(',');
-            string[] id_infermieri = ModelState["infermieres"].Value.AttemptedValue.Split(',');
-            string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
-            string id_paziente = ModelState["IdPaziente"].Value.AttemptedValue;
-            var medici = this.AddMedici(id_medici);
-            var infermieri = this.AddInfermieri(id_infermieri);
-            var tipologie = this.AddTipologie(id_tipologie);
-            var paziente = db.pazientes.First(paz => paz.IdPaziente.ToString().Equals(id_paziente));
-            if (!this.CheckMedico(medici, visita) ||
-                    !this.CheckInfermieri(infermieri, visita) ||
-                    !this.CheckPazienti(paziente, visita))
+
+            if (ModelState["medicos"] != null && ModelState["infermieres"] != null && ModelState["IdPaziente"] != null)
             {
-                return RedirectToAction("Index");
-            }
-            if (this.Check())
-            {
+                string[] id_medici = ModelState["medicos"].Value.AttemptedValue.Split(',');
+                string[] id_infermieri = ModelState["infermieres"].Value.AttemptedValue.Split(',');
+                string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
+                string id_paziente = ModelState["IdPaziente"].Value.AttemptedValue;
+                var medici = this.AddMedici(id_medici);
+                var infermieri = this.AddInfermieri(id_infermieri);
+                var tipologie = this.AddTipologie(id_tipologie);
+                var paziente = db.pazientes.First(paz => paz.IdPaziente.ToString().Equals(id_paziente));
+                if (!this.CheckMedico(medici, visita) ||
+                        !this.CheckInfermieri(infermieri, visita) ||
+                        !this.CheckPazienti(paziente, visita))
+                {
+                    return RedirectToAction("Index");
+                }
                 medici.ForEach(med => visita.medicos.Add(med));
                 infermieri.ForEach(infer => visita.infermieres.Add(infer));
                 tipologie.ForEach(tipo => visita.tipologias.Add(tipo));
@@ -271,45 +272,38 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "IdVisita,IdReferto")] visita visita)
         {
-            var id_referto = ModelState["IdReferto"].Value.AttemptedValue;
-            if (ModelState.IsValid)
+            visita vis = db.visitas.Where(vs => vs.IdVisita == visita.IdVisita).FirstOrDefault();
+            if (!this.CheckVisita(visita) && ModelState["IdReferto"] != null && vis != null )
             {
+                var id_referto = ModelState["IdReferto"].Value.AttemptedValue;
                 referto referto = db.refertoes.First(refe => refe.IdReferto.ToString().Equals(id_referto));
-                visita vis = db.visitas.First(visi => visi.IdVisita.ToString().Equals(visita.IdVisita.ToString()));
+                if (this.CheckReferto(referto))
+                {
+                    TempData["FailMessage"] = "Visita non modificato";
+                    return RedirectToAction("Index");
+                }
                 vis.referto = referto;
                 db.Entry(vis).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Visita modificato  con successo";
                 return RedirectToAction("Index");
             }
+            TempData["FailMessage"] = "Visita non modificato";
+
             ViewBag.IdPaziente = new SelectList(db.pazientes, "IdPaziente", "IdPaziente", visita.IdPaziente);
             ViewBag.IdReferto = new SelectList(db.refertoes, "IdReferto", "IdReferto", visita.IdReferto);
-            return View(visita);
-        }
-
-        // GET: Visite/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            visita visita = db.visitas.Find(id);
-            if (visita == null)
-            {
-                return HttpNotFound();
-            }
-            return View(visita);
-        }
-
-        // POST: Visite/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            visita visita = db.visitas.Find(id);
-            db.visitas.Remove(visita);
-            db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        private bool CheckReferto(referto referto)
+        {
+            return db.visitas.Any(vis => vis.IdReferto == referto.IdReferto) ||
+                db.interventoes.Any(inter => inter.IdReferto == referto.IdReferto);
+        }
+
+        private bool CheckVisita(visita visita)
+        {
+            return visita.IdReferto == null;
         }
 
         protected override void Dispose(bool disposing)

@@ -12,7 +12,12 @@
         <strong>Success</strong> @TempData["SuccessMessage"]
     </div>
 }
-
+@if (TempData["FailMessage"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Fail</strong> @TempData["FailMessage"]
+    </div>
+}
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>

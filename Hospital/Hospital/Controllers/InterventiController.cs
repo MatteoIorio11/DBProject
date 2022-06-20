@@ -285,45 +285,30 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "IdIntervento,IdReferto,IdPaziente")] intervento intervento)
         {
-            var id = ModelState["IdReferto"].Value.AttemptedValue;
-            if (id == null)
+            var inter = db.interventoes.Where(inte => inte.IdIntervento == intervento.IdIntervento).FirstOrDefault();
+            if (ModelState["IdReferto"] != null && inter != null)
             {
+                var id = ModelState["IdReferto"].Value.AttemptedValue;
                 referto referto = db.refertoes.First(refer => refer.IdReferto.ToString().Equals(id));
-                intervento inter = db.interventoes.First(inte => inte.IdIntervento == intervento.IdIntervento);
+                if (this.CheckReferto(referto))
+                {
+                    TempData["FailMessage"] = "Intervento non modificato ";
+                    return RedirectToAction("Index");
+                }
+                inter = db.interventoes.First(inte => inte.IdIntervento == intervento.IdIntervento);
                 inter.referto = referto;
                 db.Entry(inter).State = EntityState.Modified;
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Intervento modificato con successo";
                 return RedirectToAction("Index");
             }
-            ViewBag.IdPaziente = new SelectList(db.pazientes, "IdPaziente", "Nome", intervento.IdPaziente);
-            ViewBag.IdReferto = new SelectList(db.refertoes, "IdReferto", "IdReferto", intervento.IdReferto);
-            return View(intervento);
-        }
-
-        // GET: Interventi/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            intervento intervento = db.interventoes.Find(id);
-            if (intervento == null)
-            {
-                return HttpNotFound();
-            }
-            return View(intervento);
-        }
-
-        // POST: Interventi/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            intervento intervento = db.interventoes.Find(id);
-            db.interventoes.Remove(intervento);
-            db.SaveChanges();
+            TempData["FailMessage"] = "Intervento non modificato ";
             return RedirectToAction("Index");
+        }
+        private bool CheckReferto(referto referto)
+        {
+            return db.visitas.Any(vis => vis.IdReferto == referto.IdReferto) ||
+                db.interventoes.Any(inter => inter.IdReferto == referto.IdReferto);
         }
 
         protected override void Dispose(bool disposing)

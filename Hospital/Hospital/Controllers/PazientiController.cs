@@ -121,9 +121,22 @@ namespace Hospital.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             paziente paziente = db.pazientes.Find(id);
-            db.pazientes.Remove(paziente);
-            db.SaveChanges();
+            if (!this.CheckOperazioni(paziente))
+            {
+                db.pazientes.Remove(paziente);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Paziente eliminato successo";
+                return RedirectToAction("Index");
+            }
+            TempData["FailMessage"] = "Paziente non eliminato";
             return RedirectToAction("Index");
+
+        }
+
+        private bool CheckOperazioni(paziente paziente)
+        {
+            return db.interventoes.Any(inter => inter.paziente.IdPaziente == paziente.IdPaziente) ||
+                db.visitas.Any(visit => visit.IdPaziente == paziente.IdPaziente);
         }
 
         protected override void Dispose(bool disposing)

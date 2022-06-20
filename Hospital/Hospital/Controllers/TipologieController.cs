@@ -52,8 +52,10 @@ namespace Hospital.Controllers
             {
                 db.tipologias.Add(tipologia);
                 db.SaveChanges();
+                TempData["SuccessMessage"] = "Tipologia aggiunta con successo";
                 return RedirectToAction("Index");
             }
+            TempData["FailMessage"] = "Tipologia non aggiunta";
 
             return View(tipologia);
         }
@@ -84,9 +86,10 @@ namespace Hospital.Controllers
             {
                 db.Entry(tipologia).State = EntityState.Modified;
                 db.SaveChanges();
-                TempData["SuccessMessage"] = "Medico aggiunto con successo";
+                TempData["SuccessMessage"] = "Tipologia eliminata con successo";
                 return RedirectToAction("Index");
             }
+            TempData["FailMessage"] = "Tipologia non eliminata";
             return View(tipologia);
         }
 
@@ -111,9 +114,23 @@ namespace Hospital.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             tipologia tipologia = db.tipologias.Find(id);
-            db.tipologias.Remove(tipologia);
-            db.SaveChanges();
+            if (this.CheckTipologia(tipologia))
+            {
+                db.tipologias.Remove(tipologia);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Tipologia aggiunto con successo";
+                return RedirectToAction("Index");
+            }
+            TempData["FailMessage"] = "Medico non eliminato";
             return RedirectToAction("Index");
+        }
+
+        public bool CheckTipologia(tipologia tipologia)
+        {
+            return db.chirurgoes.Any(ch => ch.tipologias.Any(tip => tip.IdTipologia == tipologia.IdTipologia)) ||
+                db.medicos.Any(med => med.tipologias.Any(tip => tip.IdTipologia == tipologia.IdTipologia)) ||
+                db.interventoes.Any(inter => inter.tipologias.Any(tip => tip.IdTipologia == tipologia.IdTipologia)) ||
+                db.visitas.Any(vist => vist.tipologias.Any(tip => tip.IdTipologia == tipologia.IdTipologia));
         }
 
         [HttpGet]

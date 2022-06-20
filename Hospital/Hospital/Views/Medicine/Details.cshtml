@@ -36,6 +36,31 @@
 
     </dl>
 </div>
+<h3>Cure a cui è associato</h3>
+<table class="table">
+    <tr>
+        <th>
+            <label>Id Cura</label>
+        </th>
+        <th>
+            <label>Descrizione </label>
+        </th>
+    </tr>
+    @foreach (var medi in Model.curas)
+    {
+        <tr>
+            <th>
+                @Html.DisplayFor(model => medi.IdCura)
+
+            </th>
+            <th>
+                @Html.DisplayFor(model => medi.Descrizione)
+
+            </th>
+        </tr>
+
+    }
+</table>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.IdMedicina }) |
     @Html.ActionLink("Back to List", "Index")
