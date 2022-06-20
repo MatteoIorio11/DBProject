@@ -74,7 +74,7 @@ namespace Hospital.Controllers
                 {
                     string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
                     var tipologie = this.AddTipologie(id_tipologie);
-                    if(this.CheckTipologia(tipologie, chirurghi))
+                    if(!this.CheckTipologia(tipologie, chirurghi))
                     {
                         TempData["FailMessage"] = "Intervento non aggiunto ";
                         return RedirectToAction("Index");
@@ -109,7 +109,8 @@ namespace Hospital.Controllers
 
         private bool CheckTipologia(List<tipologia> tipologie, List<chirurgo> chirurgo)
         {
-            return tipologie.Any(tipo => chirurgo.Any(ch => ch.tipologias.Any(tipol => tipol.IdTipologia != tipo.IdTipologia)));
+            // Tutte le tipologie dell intervento che si devono creare devono essere contenute nei vari chirurghi
+            return tipologie.All(tipo => chirurgo.All(ch => ch.tipologias.Contains(tipo)));
         }
 
         public List<chirurgo> AddChirurghi(string[] ids)
