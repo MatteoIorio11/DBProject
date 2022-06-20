@@ -25,6 +25,9 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.IdChirurgo)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Nome)
         </th>
         <th>
@@ -47,31 +50,37 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cognome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CodiceFiscale)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataNascita)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genere)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NumeroDiTelefono)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.IdChirurgo }) |
-                @Html.ActionLink("Details", "Details", new { id = item.IdChirurgo }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.IdChirurgo })
-            </td>
-        </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.IdChirurgo)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Nome)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Nome)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Cognome)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CodiceFiscale)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DataNascita)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Genere)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NumeroDiTelefono)
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.IdChirurgo }) |
+        @Html.ActionLink("Details", "Details", new { id = item.IdChirurgo }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.IdChirurgo })
+    </td>
+</tr>
     }
 
 </table>

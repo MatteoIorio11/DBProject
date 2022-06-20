@@ -49,11 +49,14 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdChirurgo,Nome,Cognome,CodiceFiscale,DataNascita,Genere,NumeroDiTelefono,tipologias")] chirurgo chirurgo)
         {
-            string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
             if (!this.Check(chirurgo))
             {
-                var tipologie= this.AddTipologie(id_tipologie);
-                tipologie.ForEach(tipo => chirurgo.tipologias.Add(tipo));
+                if(ModelState["tipologias"] != null)
+                {
+                    string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
+                    var tipologie = this.AddTipologie(id_tipologie);
+                    tipologie.ForEach(tipo => chirurgo.tipologias.Add(tipo));
+                }
                 db.chirurgoes.Add(chirurgo);
                 db.SaveChanges();
                 TempData["SuccessMessage"] = "Chirurgo aggiunto con successo";
@@ -133,7 +136,7 @@ namespace Hospital.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             chirurgo chirurgo = db.chirurgoes.Find(id);
-            if (!this.CheckInterventi(chirurgo))
+            if (!this.CheckInterventi(chirurgo) && !this.CheckTipologie(chirurgo))
             {
                 db.chirurgoes.Remove(chirurgo);
                 db.SaveChanges();
@@ -142,6 +145,11 @@ namespace Hospital.Controllers
             }
             TempData["FailMessage"] = "Chirurgo non eliminato";
             return RedirectToAction("Index");
+        }
+
+        private bool CheckTipologie(chirurgo chirurgo)
+        {
+            return db.tipologias.Any(tipol => tipol.chirurgoes.Any(ch => ch.IdChirurgo == chirurgo.IdChirurgo));
         }
 
         private bool CheckInterventi(chirurgo chirurgo)

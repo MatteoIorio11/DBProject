@@ -68,6 +68,69 @@
 
     </dl>
 </div>
+<div class="col-md-12">
+    <div class="col-md-6">
+        <h3>Visite a cui partecipa l'infermiere</h3>
+        <table class="table">
+            <tr>
+                <th>
+                    <label>Id Visita</label>
+                </th>
+                <th>
+                    <label>Descrizione </label>
+                </th>
+                <th>
+                    <label>Data</label>
+                </th>
+            </tr>
+            @foreach (var medi in Model.visitas)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(model => medi.IdVisita)
+
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => medi.Descrizione)
+
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => medi.Giorno)
+
+                    </th>
+                </tr>
+
+            }
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h3>Tipologia medico</h3>
+        <table class="table">
+            <tr>
+                <th>
+                    <label>Id Tipologia</label>
+                </th>
+                <th>
+                    <label>Descrizione</label>
+                </th>
+            </tr>
+            @foreach (var medi in Model.tipologias)
+            {
+                <tr>
+                    <th>
+                        @Html.DisplayFor(model => medi.IdTipologia)
+
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => medi.Descrizione)
+
+                    </th>
+                </tr>
+
+            }
+        </table>
+    </div>
+</div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.IdMedico }) |
     @Html.ActionLink("Back to List", "Index")

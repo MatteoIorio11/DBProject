@@ -55,22 +55,35 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(intervento intervento)
         {
-            string[] id_chirurghi = null;
-            var idPaziente = intervento.IdPaziente;
-            if (ModelState["chirurgoes"] != null) {
-                id_chirurghi = ModelState["chirurgoes"].Value.AttemptedValue.Split(',');
-            }
-            if (id_chirurghi != null || idPaziente == null)
+            if (ModelState["chirurgoes"] != null && ModelState["IdPaziente"] != null)
             {
-                string[] id_infermieri = ModelState["infermieres"].Value.AttemptedValue.Split(',');
-                string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
+                var id_chirurghi = ModelState["chirurgoes"].Value.AttemptedValue.Split(',');
+                if (ModelState["infermieres"] != null)
+                {
+                    string[] id_infermieri = ModelState["infermieres"].Value.AttemptedValue.Split(',');
+                    var infermieri = this.AddInfermieri(id_infermieri);
+                    if (!this.CheckInfermieri(infermieri, intervento))
+                    {
+                        TempData["FailMessage"] = "Intervento non aggiunto ";
+                        return RedirectToAction("Index");
+                    }
+                    infermieri.ForEach(inf => intervento.infermieres.Add(inf));
+                }
                 var chirurghi = this.AddChirurghi(id_chirurghi);
-                var infermieri = this.AddInfermieri(id_infermieri);
-                var tipologie  = this.AddTipologie(id_tipologie);
+                if (ModelState["tipologias"] != null && intervento.tipologias.Count > 0)
+                {
+                    string[] id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
+                    var tipologie = this.AddTipologie(id_tipologie);
+                    if(!this.CheckTipologia(intervento, chirurghi))
+                    {
+                        TempData["FailMessage"] = "Intervento non aggiunto ";
+                        return RedirectToAction("Index");
+                    }
+                    tipologie.ForEach(tipo => intervento.tipologias.Add(tipo));
+                }
                 var paziente = db.pazientes.FirstOrDefault(paz => paz.IdPaziente == intervento.IdPaziente);
                 /*CONTROLLO SE IL CHIRURGO NON E' GIA IMPEGNATO IN UN ALTRO INTERVENTO*/
                 if(!this.CheckChirurgo(chirurghi, intervento) || 
-                    !this.CheckInfermieri(infermieri,intervento) || 
                     !this.CheckPazienti(paziente,intervento))
                 {
                     TempData["FailMessage"] = "Intervento non aggiunto ";
@@ -82,8 +95,6 @@ namespace Hospital.Controllers
                     db.Entry(paziente).State = EntityState.Modified;
                 }
                 chirurghi.ForEach(ch => intervento.chirurgoes.Add(ch));
-                infermieri.ForEach(inf => intervento.infermieres.Add(inf));
-                tipologie.ForEach(tipo => intervento.tipologias.Add(tipo));
 
                 db.interventoes.Add(intervento);
                 db.SaveChanges();
@@ -94,6 +105,11 @@ namespace Hospital.Controllers
             TempData["FailMessage"] = "Intervento non aggiunto ";
 
             return RedirectToAction("Index");
+        }
+
+        private bool CheckTipologia(intervento intervento , List<chirurgo> chirurgo)
+        {
+            return intervento.tipologias.Any(tipo => chirurgo.Any(ch => ch.tipologias.Any(tipol => tipol.IdTipologia != tipo.IdTipologia)));
         }
 
         public List<chirurgo> AddChirurghi(string[] ids)
@@ -134,11 +150,7 @@ namespace Hospital.Controllers
                     from inf in interventi_infermieri
                     join inter in db.interventoes on inf.IdIntervento equals inter.IdIntervento
                     where inter.Giorno == intervento.Giorno &&
-                    ((inter.OraInizio == intervento.OraInizio ||
-                    inter.OraFine == intervento.OraFine ||
-                    inter.OraInizio == intervento.OraFine ||
-                    inter.OraFine == intervento.OraInizio) ||
-                    (inter.OraInizio < intervento.OraInizio &&
+                    ((inter.OraInizio < intervento.OraInizio &&
                     inter.OraFine > intervento.OraFine) ||
                     (inter.OraInizio > intervento.OraInizio &&
                     inter.OraInizio < intervento.OraFine) ||
@@ -154,11 +166,7 @@ namespace Hospital.Controllers
                     from inf in visite_infermieri
                     join vis in db.visitas on inf.IdVisita equals vis.IdVisita
                     where vis.Giorno == intervento.Giorno &&
-                    ((vis.OraInizio == intervento.OraInizio ||
-                    vis.OraFine == intervento.OraFine ||
-                    vis.OraInizio == intervento.OraFine ||
-                    vis.OraFine == intervento.OraInizio) ||
-                    (vis.OraInizio < intervento.OraInizio &&
+                    ((vis.OraInizio < intervento.OraInizio &&
                     vis.OraFine > intervento.OraFine) ||
                     (vis.OraInizio > intervento.OraInizio &&
                     vis.OraInizio < intervento.OraFine) ||
@@ -178,11 +186,7 @@ namespace Hospital.Controllers
             from  inter in db.interventoes
             where inter.IdPaziente == p.IdPaziente && 
             inter.Giorno == intervento.Giorno &&
-            ((inter.OraInizio == intervento.OraInizio ||
-            inter.OraFine == intervento.OraFine ||
-            inter.OraInizio == intervento.OraFine ||
-            inter.OraFine == intervento.OraInizio) ||
-            (inter.OraInizio < intervento.OraInizio &&
+            ((inter.OraInizio < intervento.OraInizio &&
             inter.OraFine > intervento.OraFine) ||
             (inter.OraInizio > intervento.OraInizio &&
             inter.OraInizio < intervento.OraFine) ||
@@ -198,11 +202,7 @@ namespace Hospital.Controllers
             from vis in db.visitas
             where vis.IdPaziente == p.IdPaziente &&
             vis.Giorno == intervento.Giorno &&
-            ((vis.OraInizio == intervento.OraInizio ||
-            vis.OraFine == intervento.OraFine ||
-            vis.OraInizio == intervento.OraFine ||
-            vis.OraFine == intervento.OraInizio) ||
-            (vis.OraInizio < intervento.OraInizio &&
+            ((vis.OraInizio < intervento.OraInizio &&
             vis.OraFine > intervento.OraFine) ||
             (vis.OraInizio > intervento.OraInizio &&
             vis.OraInizio < intervento.OraFine) ||
@@ -226,11 +226,7 @@ namespace Hospital.Controllers
                     from chi in interventi_chirurgo
                     join inter in db.interventoes on chi.IdIntervento equals inter.IdIntervento
                     where inter.Giorno == intervento.Giorno &&
-                    ((inter.OraInizio == intervento.OraInizio ||
-                    inter.OraFine == intervento.OraFine ||
-                    inter.OraInizio == intervento.OraFine ||
-                    inter.OraFine == intervento.OraInizio) ||
-                    (inter.OraInizio < intervento.OraInizio &&
+                    ((inter.OraInizio < intervento.OraInizio &&
                     inter.OraFine > intervento.OraFine) ||
                     (inter.OraInizio > intervento.OraInizio &&
                     inter.OraInizio < intervento.OraFine) ||

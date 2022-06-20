@@ -49,12 +49,15 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "IdMedico,Nome,Cognome,CodiceFiscale,DataNascita,Genere,NumeroVisiteEffettuate,NumeroDiTelefono,tipologias")] medico medico)
         {
-            var id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
             if (!this.Check(medico))
             {
-                //AGGIUNGERE LA TIPOLOGIA
-                var tipologie = this.AddTipologie(id_tipologie);
-                tipologie.ForEach(tipo => medico.tipologias.Add(tipo));
+                if (ModelState["tipologias"] != null)
+                {
+                    var id_tipologie = ModelState["tipologias"].Value.AttemptedValue.Split(',');
+                    //AGGIUNGERE LA TIPOLOGIA
+                    var tipologie = this.AddTipologie(id_tipologie);
+                    tipologie.ForEach(tipo => medico.tipologias.Add(tipo));
+                }
                 medico.NumeroVisiteEffettuate = 0;
                 db.medicos.Add(medico);
                 db.SaveChanges();
@@ -135,9 +138,26 @@ namespace Hospital.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             medico medico = db.medicos.Find(id);
-            db.medicos.Remove(medico);
-            db.SaveChanges();
+            if(!this.CheckVisite(medico) && !this.CheckTipologie(medico))
+            {
+                db.medicos.Remove(medico);
+                db.SaveChanges();
+                TempData["SuccessMessage"] = "Medico eliminato successo";
+                return RedirectToAction("Index");
+            }
+            TempData["FailMessage"] = "Medico non eliminato";
+
             return RedirectToAction("Index");
+        }
+
+        private bool CheckTipologie(medico medico)
+        {
+            return db.tipologias.Any(tipo => tipo.medicos.Any(medi => medi.IdMedico == medico.IdMedico));
+        }
+
+        private bool CheckVisite(medico medico)
+        {
+            return db.visitas.Any(vist => vist.medicos.Any(medi => medi.IdMedico == medico.IdMedico));
         }
 
         protected override void Dispose(bool disposing)
