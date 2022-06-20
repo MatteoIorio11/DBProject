@@ -7,7 +7,10 @@ Per poter utilizzare il nostro applicativo prima di tutto bisogna avere i seguen
   - MySql
   - MySql for Visual Studio
   - Visual Studio 2019
+
+
 Una volta caricata la soluzione all'interno del vostro Visual Studio sarà necessario installare una serie di pacchetti attraverso la voce "tool"->"NuGet"
+I pacchetti da installare saranno :   
   - EntityFramework
   - MySql.Data
   - MySql.Data.EntityFramework
