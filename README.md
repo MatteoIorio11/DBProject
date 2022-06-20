@@ -4,7 +4,7 @@ Progetto Basi di Dati : Hospital
 
 
 Per poter utilizzare il nostro applicativo prima di tutto bisogna avere i seguenti software installi sul proprio computer : 
-  - MySql
+  - MySql Connector Net
   - MySql for Visual Studio
   - Visual Studio 2019
 ------------------------------------------
