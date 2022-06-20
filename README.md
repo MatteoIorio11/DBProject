@@ -30,10 +30,5 @@ Una volta installati tutti questi pacchetti, sarà necessario collegare il vostr
 Una volta collegato correttamente il vostro Data Base, si proceda cliccando sul menu a sinitra, navigando nella cartella Views -> Home -> Index.cshtml, 
 basterà lanciare il nostro applicativo semplicemente premendo CTRL + F5 e verrete catapultati sul nostro gestionale.
 
-Attraverso la navbar potrete esplorare tutte le possibilità del nostro gestionale, svagando dal creare le cure ad arrivare a creare i vari interventi. Tenendo
-conto sempre di tutti i vincoli introdotti dalla nostra analisi.
-
-
-
 
 
