@@ -17,9 +17,9 @@ I pacchetti da installare saranno :
   - MySql.Data
   - MySql.Data.EntityFramework
 
+------------------------------------------
 
 Una volta installati tutti questi pacchetti, sarà necessario collegare il vostro DB a Visual Studio. E successivamente cambiare la stringa di connessione all'interno del file Web.Config, tale stringa andrà modificata con le vostre credenziali ed i vostri dati.
-------------------------------------------
 
 
 ```
